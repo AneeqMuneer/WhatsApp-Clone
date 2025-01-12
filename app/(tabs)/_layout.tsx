@@ -1,45 +1,46 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
-
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Tabs } from "expo-router";
+import { Pressable, Text, View } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+    return (
+        <Tabs
+            initialRouteName="(chats)"
+            screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                    let iconName;
 
-  return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
-  );
+                    if (route.name === "(chats)") {
+                        iconName = focused ? "chatbox-ellipses" : "chatbox-ellipses-outline";
+                    } else if (route.name === "Updates") {
+                        iconName = focused ? "disc" : "disc-outline";
+                    } else if (route.name === "Communities") {
+                        iconName = focused ? "people" : "people-outline";
+                    } else if (route.name === "Calls") {
+                        iconName = focused ? "call" : "call-outline";
+                    }
+
+                    return <Ionicons name={iconName} color={color} size={size} />
+                },
+                tabBarActiveTintColor: "#00AB50",
+                tabBarInactiveTintColor: "white",
+                tabBarLabelStyle: {
+                    fontWeight: "900",
+                },
+                tabBarStyle: {
+                    backgroundColor: '#0B141B',
+                },
+                tabBarActiveBackgroundColor: "#222E35",
+
+                headerShown: false,
+                headerTitle: "",
+                headerShadowVisible: false,
+            })}
+        >
+            <Tabs.Screen name="(chats)" options={{ title: "Chats" }} />
+            <Tabs.Screen name="(updates)" options={{ title: "Updates" }} />
+            <Tabs.Screen name="communities" options={{ title: "Communities" }} />
+            <Tabs.Screen name="calls" options={{ title: "Calls" }} />
+        </Tabs>
+    )
 }
